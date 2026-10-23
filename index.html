@@ -98,6 +98,19 @@ main section, .card, .card-head > div, .prog li > div { min-width: 0; }
 .pick small { color: var(--muted); font-size: var(--fs-xs); font-weight: 500; }
 .empty { color: var(--muted); margin-top: 14px; }
 
+/* Cambios a revisar */
+.changes { border: 2px solid var(--red); border-radius: 14px; padding: 18px 20px 20px; background: color-mix(in srgb, var(--red) 6%, var(--bg)); }
+.ch-tag { display: inline-block; background: var(--red); color: #fff; font-family: var(--label); font-weight: 700; font-size: var(--fs-xs); letter-spacing: .08em; text-transform: uppercase; padding: 2px 10px; transform: skewX(-8deg); }
+.changes h2 { font-family: var(--display); font-size: var(--fs-xl); letter-spacing: .02em; line-height: 1; margin: 10px 0 6px; }
+.changes p { margin: 0 0 14px; color: var(--muted); font-size: var(--fs-s); }
+.ch-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.ch-chip { border: 1.5px solid var(--red); background: var(--bg); color: var(--ink); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: var(--fs-s); cursor: pointer; transition: background .12s, color .12s; }
+.ch-chip:hover { background: var(--red); color: #fff; }
+.badge { margin-left: auto; align-self: center; background: var(--red); color: #fff; font-family: var(--label); font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; padding: 1px 7px; border-radius: 4px; }
+.change-note { margin: 16px 22px 0; background: var(--yellow); color: var(--on-yellow); border-radius: 10px; padding: 12px 16px; font-size: var(--fs-s); line-height: 1.45; }
+.change-note b { display: block; font-family: var(--label); font-size: var(--fs-m); text-transform: uppercase; letter-spacing: .04em; }
+.qname.chg { box-shadow: inset 4px 0 0 var(--red); }
+
 /* Ficha personal */
 .card { border: 2px solid var(--ink); border-radius: 14px; overflow: hidden; background: var(--bg); scroll-margin-top: 12px; box-shadow: var(--shadow); }
 .card-head { background: var(--soft); padding: 20px 22px 18px; display: flex; flex-wrap: wrap; gap: 14px 20px; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--line); }
@@ -209,6 +222,8 @@ footer svg { color: var(--ink); }
   .step.gap .when { padding-top: 12px; }
   .step.gap .what::before { top: -14px; }
   .msg { padding: 0 16px 16px; }
+  .change-note { margin: 14px 16px 0; }
+  .changes { padding: 16px; }
   .names { columns: 1; }
   .qd-grid { min-width: 640px; }
   .qrow { grid-template-columns: 112px repeat(14, minmax(38px, 1fr)); }
@@ -240,6 +255,13 @@ footer svg { color: var(--ink); }
 
 <main>
   <div class="wrap">
+    <section id="cambios" class="changes" aria-labelledby="h-cambios">
+      <span class="ch-tag" id="ch-date">Actualizado</span>
+      <h2 id="h-cambios">Si sales aquí, revisa tu ficha</h2>
+      <p>Ha cambiado lo que haces o con quién. Toca tu nombre para verlo.</p>
+      <div id="chlist" class="ch-list"></div>
+    </section>
+
     <section id="quien">
       <h2 class="sect-title">¿Quién eres?</h2>
       <div class="search">
@@ -290,17 +312,17 @@ const GROUPS = [
   ["Carrera: ERAs / Salida / Llegada", [["crodriguez","Carlos Rodríguez"],["villacorta","Juan Carlos Villacorta","Villacorta"],["marquina","Guillermo Marquina","Marquina"]]],
   ["Guía Bici", [["rodri","Fco. Javier Rodrigo","Rodri"]]],
   ["Guía Moto", [["calvin","Calvin"]]],
-  ["Carreras Infantiles", [["pico","Carlos Pico","Pico"],["paris","Fernando Paris","Paris"],["raul","Raúl Sánchez","Raúl"]]],
+  ["Carreras Infantiles", [["pico","Carlos Pico","Pico"],["paris","Fernando Paris","Paris"],["raul","Raúl Sánchez","Raúl"],["saiz","Antonio Saiz"],["zorita","José María Zorita","Zorita"]]],
   ["Aparcamiento", [["afernandez","Antonio Fernández","Antonio F"],["cantero","Ricardo Cantero","Ricardo"],["agustin","Agustín"],["moran","Morán"]]],
   ["Fotografía y Dron", [["riesco","Juan P. Riesco","Juampe"]]],
   ["Barra de Bebidas", [["cartero","J. Carlos Díaz","Cartero"],["marino","Guillermo J. Marino","Guille Chiquitín"],["davila","Víctor Dávila","Dávila"]]],
-  ["Tirolina + Maniobra de Altura", [["alex","Alejandro Muñoz","Alex"],["estepar","Javier Estepar","Estepar"],["juanki","Juan Carlos Fernández","Juanki"],["arias","David Arias","Arias"],["calvo","Carlos Calvo","Calvo"],["asuarez","Antonio Suárez","Antonio S"],["cedron","Adrián Cedrón","Cedrón"]]],
-  ["Ultimate Firefighter", [["angulo","Félix Angulo","Félix"],["depaz","Jorge de Paz","Jorge"],["alberto","Alberto","Alber"],["mamen","Mamen"]]],
+  ["Tirolina + Maniobra de Altura", [["alex","Alejandro Muñoz","Alex"],["estepar","Javier Estepar","Estepar"],["arias","David Arias","Arias"],["calvo","Carlos Calvo","Calvo"],["asuarez","Antonio Suárez","Antonio S"],["mamen","Mamen"],["victort1","Victor T1"],["cedron","Adrián Cedrón","Cedrón"],["alberto","Alberto","Alber"]]],
+  ["Ultimate Firefighter", [["angulo","Félix Angulo","Félix"],["depaz","Jorge de Paz","Jorge"]]],
   ["Remo", [["buelga","Rubén Buelga","Buelga"],["motino","Félix Motiño","Motiño"],["bonati","Diego Bonati","Bonati"]]],
-  ["Ropero", [["causapie","Mario Causapié","Mario"],["motilla","Juan Carlos «Motilla»","Motilla"]]],
+  ["Ropero", [["causapie","Mario Causapié","Mario"],["motilla","Juan Carlos «Motilla»","Motilla"],["marc","Marc"]]],
   ["Carpa de Prevención", [["romo","Jaime Romo","Romo"],["solis","Rubén Solís","Solís"],["polli","Sergio Polli","Polli"]]],
   ["Sonido", [["galvez","Gonzalo Gálvez","Gonzalo"]]],
-  ["Personal de guardia (apoyo)", [["manchon","Pedro Manchón"],["depablo","Álvaro de Pablo"],["larragueta","David Larragueta"],["ortiz","Sergio Ortiz"],["psanchez","Pedro Sánchez"],["loro","Raúl A. Loro"],["demingo","Pablo de Mingo"],["zorita","José María Zorita"],["isma","Isma"]]],
+  ["Personal de guardia (apoyo)", [["manchon","Pedro Manchón"],["depablo","Álvaro de Pablo"],["larragueta","David Larragueta"],["ortiz","Sergio Ortiz"],["psanchez","Pedro Sánchez"],["loro","Raúl A. Loro"],["demingo","Pablo de Mingo"],["camacho","Óscar Camacho"],["isma","Isma"]]],
 ];
 
 // Nombre corto para el cuadrante y familia de color
@@ -325,22 +347,22 @@ const TASKS = [
   ["Fotografía y dron", [["9:00","16:00",["riesco"]]]],
   ["Sonido", [["9:00","16:00",["galvez"]]]],
   ["Carrera: ERAs / Salida / Llegada", [["9:00","11:30",["crodriguez","villacorta","marquina"]]]],
-  ["Puestos del recorrido de la carrera", [["9:00","11:30",["pico","paris","juanki","calvo","asuarez","angulo","depaz","bonati","mamen","romo"]]]],
+  ["Puestos del recorrido de la carrera", [["9:00","11:30",["pico","paris","calvo","asuarez","angulo","depaz","bonati","mamen","romo","zorita"]]]],
   ["Guía bici", [["9:00","12:00",["rodri"]]]],
   ["Guías moto", [["9:00","11:30",["cartero","calvin"]]]],
   ["Guía Raptor", [["9:00","11:30",["alberto"]]]],
   ["Buses escoba", [["9:00","11:30",["motino","buelga"]]]],
-  ["Carrera infantil", [["11:30","12:00",["pico","paris","raul"]]]],
+  ["Carrera infantil", [["11:30","12:00",["pico","paris","raul","saiz","zorita"]]]],
   ["Corre la carrera urbana", [["10:30","11:30",["cantero","agustin","raul"]]]],
-  ["Tirolina + Maniobra de altura", [["10:00","11:30",["alex","estepar","arias"],"Preparación"],["11:30","14:00",["alex","estepar","arias","juanki","calvo","cedron","asuarez","marquina"]]]],
-  ["Ultimate Firefighter", [["12:30","13:30",["angulo","depaz","alberto","mamen"]]]],
-  ["Remo", [["12:30","13:30",["buelga","motino","bonati","crodriguez"]]]],
-  ["Paella", [["14:00","15:00",["buelga","motino","bonati","pico","paris","raul","cedron","depaz"]]]],
-  ["Parking", [["9:00","10:00",["afernandez","moran","cantero","agustin"]],["10:00","11:30",["afernandez","moran"],"Aparcamiento"],["11:30","16:00",["afernandez","moran","cantero"]]]],
-  ["Ropero", [["9:00","10:30",["causapie","motilla","cedron"]],["10:30","16:00",["causapie","motilla"]]]],
+  ["Tirolina + Maniobra de altura", [["10:00","11:30",["alex","estepar","arias","victort1"],"Preparación"],["11:30","14:00",["alex","estepar","arias","victort1","calvo","cedron","asuarez","mamen","alberto","crodriguez"]]]],
+  ["Ultimate Firefighter", [["12:30","13:30",["angulo","depaz","pico","raul","paris"]]]],
+  ["Remo", [["12:30","13:30",["buelga","motino","bonati","rodri","marquina"]]]],
+  ["Paella", [["14:00","15:00",["buelga","motino","marquina","pico","paris","raul","cedron","depaz"]]]],
+  ["Parking", [["9:00","10:00",["afernandez","moran","cantero","agustin","marino","davila"]],["10:00","11:30",["afernandez","moran"],"Aparcamiento"],["11:30","16:00",["afernandez","moran","cantero"]]]],
+  ["Ropero", [["9:00","10:30",["causapie","motilla","cedron"]],["10:30","12:30",["causapie","motilla"]],["12:30","16:00",["causapie","motilla","marc"]]]],
   ["Barra de bebidas", [["10:30","11:30",["marino","davila"]],["11:30","16:00",["marino","davila","cartero"]]]],
   ["Carpa de prevención", [["10:30","11:30",["solis","polli"]],["11:30","16:00",["solis","polli","romo"]]]],
-  ["De guardia: apoyo en lo que se pueda", [["9:00","16:00",["manchon","depablo","larragueta","ortiz","psanchez","loro","demingo","zorita","isma"]]]],
+  ["De guardia: apoyo en lo que se pueda", [["9:00","16:00",["manchon","depablo","larragueta","ortiz","psanchez","loro","demingo","camacho","isma"]]]],
 ].map(([label, segs], i) => ({ key: "t" + i, label, short: META[label][0], cat: META[label][1], segs: segs.map(([s, e, ppl, note]) => ({ s: h(s), e: h(e), ppl, note })) }));
 
 // Cronograma oficial del Memorial
@@ -355,6 +377,27 @@ const PROGRAM = [
   ["13:30", "Entrega de trofeos 2", "Ultimate Firefighter y remo"],
   ["14:00", "Paella"],
 ];
+
+// Personas cuya ficha ha cambiado en la última actualización
+const UPDATED = "viernes 23 de octubre";
+const CHANGES = {
+  marquina: "Ya no estás en Tirolina. Ahora tienes Remo (12:30–13:30) y Paella (14:00–15:00).",
+  bonati: "Ya no estás en la Paella.",
+  crodriguez: "Ya no estás en Remo. Pasas a Tirolina de 11:30 a 14:00, después de los ERAs.",
+  rodri: "Nuevo: Remo de 12:30 a 13:30, después de guiar la bici.",
+  alberto: "Ya no estás en Ultimate. Pasas a Tirolina de 11:30 a 14:00, después del Raptor.",
+  mamen: "Ya no estás en Ultimate. Pasas a Tirolina de 11:30 a 14:00, después del recorrido.",
+  pico: "Nuevo: Ultimate Firefighter de 12:30 a 13:30.",
+  paris: "Nuevo: Ultimate Firefighter de 12:30 a 13:30.",
+  raul: "Nuevo: Ultimate Firefighter de 12:30 a 13:30.",
+  marino: "Nuevo: Parking de 9:00 a 10:00, antes de la barra.",
+  davila: "Nuevo: Parking de 9:00 a 10:00, antes de la barra.",
+  zorita: "Te hemos asignado: Puestos del recorrido (9:00–11:30) y Carrera infantil (11:30–12:00).",
+  saiz: "Te hemos asignado: Carrera infantil de 11:30 a 12:00.",
+  victort1: "Te hemos asignado: Tirolina (preparación desde las 10:00, hasta las 14:00).",
+  marc: "Te hemos asignado: Ropero de 12:30 a 16:00.",
+  camacho: "Te hemos asignado: De guardia, de 9:00 a 16:00.",
+};
 
 const PEOPLE = {};
 GROUPS.forEach(([fn, ppl]) => ppl.forEach(([id, name, alias]) => { PEOPLE[id] = { id, name, alias, fn }; }));
@@ -407,16 +450,18 @@ function renderCard(id) {
       </div>
       <div class="btns"><button type="button" class="btn red" id="copy">Copiar para WhatsApp</button><button type="button" class="btn" id="other">Otra persona</button></div>
     </div>
+    ${CHANGES[id] ? `<div class="change-note"><b>Ha cambiado tu ficha</b>${esc(CHANGES[id])}</div>` : ""}
     <ol class="steps">${rows}</ol>
     <div class="msg"><div class="ok" id="ok"></div><textarea id="fb" class="fallback" readonly hidden aria-label="Texto para copiar"></textarea></div>
   </article>`;
   box.hidden = false;
   document.getElementById("other").onclick = () => select(null, true);
-  document.getElementById("copy").onclick = () => copy(whatsapp(p, sch));
+  document.getElementById("copy").onclick = () => copy(whatsapp(p, sch, CHANGES[id]));
 }
 
-function whatsapp(p, sch) {
+function whatsapp(p, sch, change) {
   const L = [`*Memorial Bomberos P23 · Domingo 25 oct*`, `Hola ${firstName(p)}, esto es lo tuyo:`, ""];
+  if (change) L.splice(2, 0, `_Cambio: ${change}_`);
   sch.forEach(b => {
     L.push(`• *${fmt(b.s)}–${fmt(b.e)}* ${b.task.label}`);
     b.parts.forEach(pt => {
@@ -453,11 +498,13 @@ function renderNames(filter) {
     n += hits.length;
     if (!hits.length) return "";
     return `<li><div class="fn">${esc(fn)}</div>${hits.map(([id, name, alias]) =>
-      `<button type="button" class="pick" data-pick="${id}" aria-pressed="${id === current}">${esc(name)}${alias && !norm(name).includes(norm(alias.replace(/[«»]/g, ""))) ? ` <small>· ${esc(alias)}</small>` : ""}</button>`).join("")}</li>`;
+      `<button type="button" class="pick" data-pick="${id}" aria-pressed="${id === current}">${esc(name)}${alias && !norm(name).includes(norm(alias.replace(/[«»]/g, ""))) ? ` <small>· ${esc(alias)}</small>` : ""}${CHANGES[id] ? `<span class="badge">Revisa</span>` : ""}</button>`).join("")}</li>`;
   }).join("");
   document.getElementById("empty").hidden = n > 0;
 }
 
+document.getElementById("ch-date").textContent = "Actualizado el " + UPDATED;
+document.getElementById("chlist").innerHTML = Object.keys(CHANGES).filter(id => PEOPLE[id]).map(id => `<button type="button" class="ch-chip" data-pick="${id}">${esc(PEOPLE[id].name)}</button>`).join("");
 document.getElementById("prog").innerHTML = PROGRAM.map(([t, what, note]) => `<li><span class="t">${t}</span><div><b>${esc(what)}</b>${note ? `<span class="note">${esc(note)}</span>` : ""}</div></li>`).join("");
 document.getElementById("teams").innerHTML = TASKS.map(t => {
   const s = Math.min(...t.segs.map(x => x.s)), e = Math.max(...t.segs.map(x => x.e));
@@ -482,7 +529,7 @@ function renderGrid() {
       if (only && busy.every(Boolean)) return;
       const cells = busy.map((b, i) => `<div class="qcell${b ? "" : " free"}" style="${col(i)}"></div>`).join("");
       const blocks = scheduleFor(id).map(b => `<button type="button" class="qb" data-pick="${id}" style="--c:var(--c-${b.task.cat});grid-column:${b.s / 30 + 2} / ${b.e / 30 + 2}" title="${fmt(b.s)}–${fmt(b.e)} · ${esc(b.task.label)}">${esc(b.task.short)}</button>`).join("");
-      rows += `<div class="qrow${id === current ? " me" : ""}" data-id="${id}"><button type="button" class="qname" data-pick="${id}" title="${esc(PEOPLE[id].name)}">${esc(PEOPLE[id].name)}</button>${cells}${blocks}</div>`;
+      rows += `<div class="qrow${id === current ? " me" : ""}" data-id="${id}"><button type="button" class="qname${CHANGES[id] ? " chg" : ""}" data-pick="${id}" title="${esc(PEOPLE[id].name)}${CHANGES[id] ? " · ficha cambiada" : ""}">${esc(PEOPLE[id].name)}</button>${cells}${blocks}</div>`;
     });
     if (rows) html += `<div class="qrow qgroup"><div class="qname">${esc(fn)}</div><div class="fill"></div></div>` + rows;
   });
